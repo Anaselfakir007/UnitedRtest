@@ -1,6 +1,7 @@
 package com.ur.unitedrtest
 
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
@@ -18,7 +19,11 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SwipeRefreshLayout.OnRefreshListener {
+    override fun onRefresh() {
+        getRepos(true)
+    }
+
     var page: Int = 1
     var lists: ArrayList<Repo> = ArrayList()
     val simpleDateFormat2 = SimpleDateFormat("yyyy-MM-dd")
@@ -29,7 +34,8 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
         getRepos(true)
-
+        swipe.isRefreshing = true
+        swipe.setOnRefreshListener(this)
     }
 
 
@@ -38,6 +44,7 @@ class MainActivity : AppCompatActivity() {
         RetrofitClient.instance.getrepos("created:<" + simpleDateFormat2.format(date), page, "stars", "desc")
             .enqueue(object : Callback<Items> {
                 override fun onFailure(call: Call<Items>, t: Throwable) {
+                    swipe.isRefreshing = false
                     Toast.makeText(applicationContext, "Error occured", Toast.LENGTH_LONG).show()
                 }
 
@@ -49,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                         } else {
                             lists.addAll(response.body()!!.items)
                             if (iffirst) {
+                                swipe.isRefreshing = false
                                 recylerrepo.adapter = AdapterRepo(lists, applicationContext)
                                 NoPaginate.with(recylerrepo)
                                     .setOnLoadMoreListener {

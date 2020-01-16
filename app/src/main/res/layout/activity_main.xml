@@ -11,18 +11,23 @@
                                        android:gravity="center"
                                        android:id="@+id/toolbar"
                                        android:background="@android:color/darker_gray">
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:text="@string/app_name"
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                  android:text="Trending Repos"
                   android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                   android:textColor="@android:color/black"
                   android:gravity="center"
         />
     </android.support.v7.widget.Toolbar>
-    <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:id="@+id/recylerrepo"
-            android:layout_height="match_parent">
+    <android.support.v4.widget.SwipeRefreshLayout android:layout_width="match_parent"
+                                                  android:layout_height="match_parent"
+                                                  android:id="@+id/swipe">
+        <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:id="@+id/recylerrepo"
+                android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        </android.support.v7.widget.RecyclerView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
 
 </LinearLayout>
